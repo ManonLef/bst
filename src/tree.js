@@ -1,4 +1,4 @@
-import Node from "./node"
+import Node from "./node";
 
 class Tree {
   constructor(array) {
@@ -45,31 +45,6 @@ function removeDupl(array) {
   return filteredArray;
 }
 
-const testArray = [1, 7, 4, 23, 8, 9, 4, 12, 25, 12, 3, 3, 3, 5, 7, 9, 67, 6345, 324]
-console.log(
-  preparedArray(testArray)
-); // [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15];
-
-console.log(buildTree(preparedArray(testArray)))
-
-function buildTree(array) {
-
-  // base
-  if (array.length === 0) {
-    return null;
-  }
-
-  const mid = Math.floor(array.length / 2);
-  const root = new Node(array[mid])
-
-  // left half
-  root.left = buildTree(array.slice(0, mid-1))
-  
-  // right half
-  root.right = buildTree(array.slice(mid+1, array.length))
-
-  return root
-}
 
 // building the tree function pseudo
 // sort array and remove duplicates (check sorted array assignment)
@@ -83,6 +58,30 @@ function buildTree(array) {
 // find mid point of right half of the array
 // mid point right half will be the right child of initial root
 
+function buildTree(array) {
+  // base
+  if (array.length === 0) {
+    return null;
+  }
+
+  const mid = Math.floor(array.length / 2);
+  const root = new Node(array[mid]);
+  
+  // left half
+  root.left = buildTree(array.slice(0, mid));
+
+  // right half
+  root.right = buildTree(array.slice(mid + 1, array.length));
+
+  return root;
+}
+
+const testArray = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
+const myTree= new Tree(preparedArray(testArray))
+prettyPrint(myTree.root);
+console.log("prepped array ", preparedArray(testArray))
+console.log("myTree root ", myTree.root)
+
 const prettyPrint = (node, prefix = "", isLeft = true) => {
   if (node === null) {
     return;
@@ -95,5 +94,3 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
     prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
   }
 };
-
-prettyPrint(buildTree(preparedArray(testArray)))
