@@ -6,6 +6,43 @@ export default class Tree {
   constructor(array) {
     this.root = buildTree(array);
   }
+  // insert pseudo
+
+  // from the root, check if node value to be inserted is higher or lower than root.
+  // if lower, move to left
+  // if higher, move to right
+  // keep doing the above until we find a node without any left/right children
+  // if node is lower, insert left and if higher, insert right
+
+  // can we do this similar to linked list? try:
+  insert(value) {
+    console.log(this.root);
+
+    if (this.root === null) {
+      this.root = new Node(value);
+      return this.root;
+    }
+
+    let node = this.root;
+
+    // this doesn't really work since it will replace a value if only one node is present
+    while (node.left && node.right) {
+      if (value < node.data) {
+        console.log(value, "smaller, moving down the tree to the left");
+        node = node.left;
+        console.log("node is now", node);
+      } else {
+        console.log(value, "not smaller, moving down the tree to the right");
+        node = node.right;
+        console.log(node);
+      }
+    }
+
+    if (value < node.data) {
+      return node.left = new Node(value)
+    }
+    return node.right = new Node(value)
+  }
 }
 
 // building the tree function pseudo
@@ -35,26 +72,20 @@ function buildTree(array) {
   return root;
 }
 
-// insert pseudo
-
-// from the root, check if node value to be inserted is higher or lower than root.
-// if lower, move to left
-// if higher, move to right
-// keep doing the above until we find a node without any left/right children
-// if node is lower, insert left and if higher, insert right
-
-// can we do this similar to linked list? try:
-
 // testing area
-
 const testArray = [1, 3, 5, 7, 9, 2, 4, 6, 8, 10, 11, 13, 15, 12, 14];
 const testArrayDeux = [1, 7, 4, 23, 12, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
-const myTree = new Tree(preparedArray(testArray));
+const myTree = new Tree(preparedArray(testArrayDeux));
+
 prettyPrint(myTree.root);
 console.log("prepped array ", preparedArray(testArray));
 console.log("myTree root ", myTree.root);
 
-prettyPrint(buildTree(preparedArray(testArrayDeux)));
+prettyPrint(myTree.root);
+myTree.insert(8);
+prettyPrint(myTree.root);
+myTree.insert(24);
+prettyPrint(myTree.root);
 
 
 function prettyPrint(node, prefix = "", isLeft = true) {
