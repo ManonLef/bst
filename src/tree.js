@@ -1,52 +1,15 @@
+/* eslint no-use-before-define: ["error", { "functions": false }] */
 import Node from "./node";
+import { preparedArray } from "./helpers";
 
-class Tree {
+export default class Tree {
   constructor(array) {
     this.root = buildTree(array);
   }
 }
 
-function preparedArray(array) {
-  const bstArray = mergeSort(removeDupl(array));
-  return bstArray;
-}
-
-function mergeSort(array) {
-  if (array.length < 2) return array;
-
-  let firstHalf = array.slice(0, array.length / 2);
-  let secondHalf = array.slice(array.length / 2);
-
-  let left = mergeSort(firstHalf);
-  let right = mergeSort(secondHalf);
-
-  let merged = [];
-
-  while (left.length !== 0 && right.length !== 0) {
-    if (left[0] < right[0]) {
-      merged.push(left.shift());
-    } else {
-      merged.push(right.shift());
-    }
-  }
-  while (left.length !== 0) {
-    merged.push(left.shift());
-  }
-  while (right.length !== 0) {
-    merged.push(right.shift());
-  }
-
-  return merged;
-}
-
-function removeDupl(array) {
-  let arrayCopy = [...array];
-  let filteredArray = [...new Set(arrayCopy)];
-  return filteredArray;
-}
-
-
 // building the tree function pseudo
+
 // sort array and remove duplicates (check sorted array assignment)
 // if array is empty (length === 0) return null
 // find mid point of array
@@ -59,30 +22,42 @@ function removeDupl(array) {
 // mid point right half will be the right child of initial root
 
 function buildTree(array) {
-  // base
   if (array.length === 0) {
     return null;
   }
 
   const mid = Math.floor(array.length / 2);
   const root = new Node(array[mid]);
-  
-  // left half
-  root.left = buildTree(array.slice(0, mid));
 
-  // right half
+  root.left = buildTree(array.slice(0, mid));
   root.right = buildTree(array.slice(mid + 1, array.length));
 
   return root;
 }
 
-const testArray = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
-const myTree= new Tree(preparedArray(testArray))
-prettyPrint(myTree.root);
-console.log("prepped array ", preparedArray(testArray))
-console.log("myTree root ", myTree.root)
+// insert pseudo
 
-const prettyPrint = (node, prefix = "", isLeft = true) => {
+// from the root, check if node value to be inserted is higher or lower than root.
+// if lower, move to left
+// if higher, move to right
+// keep doing the above until we find a node without any left/right children
+// if node is lower, insert left and if higher, insert right
+
+// can we do this similar to linked list? try:
+
+// testing area
+
+const testArray = [1, 3, 5, 7, 9, 2, 4, 6, 8, 10, 11, 13, 15, 12, 14];
+const testArrayDeux = [1, 7, 4, 23, 12, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
+const myTree = new Tree(preparedArray(testArray));
+prettyPrint(myTree.root);
+console.log("prepped array ", preparedArray(testArray));
+console.log("myTree root ", myTree.root);
+
+prettyPrint(buildTree(preparedArray(testArrayDeux)));
+
+
+function prettyPrint(node, prefix = "", isLeft = true) {
   if (node === null) {
     return;
   }
@@ -93,4 +68,4 @@ const prettyPrint = (node, prefix = "", isLeft = true) => {
   if (node.left !== null) {
     prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
   }
-};
+}
