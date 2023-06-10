@@ -2,6 +2,7 @@ function removeDuplicates(array) {
   const arrayCopy = [...array];
   const filteredArray = [...new Set(arrayCopy)];
   return filteredArray;
+  // rewrite for practice with reduce
 }
 
 function mergeSort(array) {
@@ -32,9 +33,7 @@ function mergeSort(array) {
   return merged;
 }
 
-function preparedArray(array) {
+export default function preparedArray(array) {
   const bstArray = mergeSort(removeDuplicates(array));
   return bstArray;
 }
-
-export { preparedArray };

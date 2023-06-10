@@ -1,6 +1,6 @@
 /* eslint no-use-before-define: ["error", { "functions": false }] */
 import Node from "./node";
-import { preparedArray } from "./helpers";
+import preparedArray from "./helpers";
 
 export default class Tree {
   constructor(array) {
@@ -26,22 +26,37 @@ export default class Tree {
     let node = this.root;
 
     // this doesn't really work since it will replace a value if only one node is present
-    while (node.left && node.right) {
+    while (node.left || node.right) {
       if (value < node.data) {
         console.log(value, "smaller, moving down the tree to the left");
-        node = node.left;
-        console.log("node is now", node);
+        if (node.left) {
+          node = node.left;
+        } else {
+          node.left = new Node(value);
+          console.log("node is now", node);
+          return node.left;
+        }
       } else {
         console.log(value, "not smaller, moving down the tree to the right");
-        node = node.right;
+        if (node.right) {
+          node = node.right;
+        } else {
+          node.right = new Node(value);
+          console.log("node is now", node);
+          return node.right;
+        }
         console.log(node);
       }
     }
 
-    if (value < node.data) {
-      return node.left = new Node(value)
+    if (value < node.data && !node.left) {
+      console.log("last bit");
+      node.left = new Node(value);
+      return node.left;
     }
-    return node.right = new Node(value)
+    console.log("last bit");
+    node.right = new Node(value);
+    return node.right;
   }
 }
 
@@ -81,12 +96,16 @@ prettyPrint(myTree.root);
 console.log("prepped array ", preparedArray(testArray));
 console.log("myTree root ", myTree.root);
 
+// test inserting
 prettyPrint(myTree.root);
 myTree.insert(8);
 prettyPrint(myTree.root);
 myTree.insert(24);
 prettyPrint(myTree.root);
-
+myTree.insert(25);
+prettyPrint(myTree.root);
+myTree.insert(55);
+prettyPrint(myTree.root);
 
 function prettyPrint(node, prefix = "", isLeft = true) {
   if (node === null) {
