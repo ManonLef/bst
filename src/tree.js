@@ -27,6 +27,10 @@ export default class Tree {
 
     // this doesn't really work since it will replace a value if only one node is present
     while (node.left || node.right) {
+      if (value === node.data) {
+        console.log(`${value} already present. Goodbye`)
+        return
+      }
       if (value < node.data) {
         console.log(value, "smaller, moving down the tree to the left");
         if (node.left) {
@@ -54,9 +58,26 @@ export default class Tree {
       node.left = new Node(value);
       return node.left;
     }
+    if (value === node.data) {
+      console.log(`last bit but ${value} already present. Goodbye`)
+      return
+    }
     console.log("last bit");
     node.right = new Node(value);
     return node.right;
+  }
+
+  delete(value) {
+    // pseudo
+
+    // node has no children?
+    // remove it (remove previous node.left/right)
+
+    // node has children?
+    // 1 child?
+
+
+    // 2 child?
   }
 }
 
@@ -100,12 +121,11 @@ console.log("myTree root ", myTree.root);
 prettyPrint(myTree.root);
 myTree.insert(8);
 prettyPrint(myTree.root);
-myTree.insert(24);
+myTree.insert(13);
 prettyPrint(myTree.root);
-myTree.insert(25);
+myTree.insert(13);
 prettyPrint(myTree.root);
-myTree.insert(55);
-prettyPrint(myTree.root);
+
 
 function prettyPrint(node, prefix = "", isLeft = true) {
   if (node === null) {
