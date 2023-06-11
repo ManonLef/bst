@@ -28,8 +28,8 @@ export default class Tree {
     // this doesn't really work since it will replace a value if only one node is present
     while (node.left || node.right) {
       if (value === node.data) {
-        console.log(`${value} already present. Goodbye`)
-        return
+        console.log(`${value} already present. Goodbye`);
+        return;
       }
       if (value < node.data) {
         console.log(value, "smaller, moving down the tree to the left");
@@ -59,8 +59,8 @@ export default class Tree {
       return node.left;
     }
     if (value === node.data) {
-      console.log(`last bit but ${value} already present. Goodbye`)
-      return
+      console.log(`last bit but ${value} already present. Goodbye`);
+      return;
     }
     console.log("last bit");
     node.right = new Node(value);
@@ -68,16 +68,59 @@ export default class Tree {
   }
 
   delete(value) {
-    // pseudo
+    // both this and insert function are very verbose. Consider recursing them.
+    // this function is not complete yet. Choose a method for deletion of node with 
+    // 2 children
+    let node = this.root;
+    let previous = node;
 
-    // node has no children?
-    // remove it (remove previous node.left/right)
-
-    // node has children?
-    // 1 child?
-
-
-    // 2 child?
+    while (node.left || node.right) {
+      if (value === node.data) {
+        if (node.left && node.right) {
+          return console.log(
+            `has both children with values of ${node.left.data} & ${node.right.data}`
+          );
+        }
+        if (node.right) {
+          console.log(`has right child with value of ${node.right.data}`);
+          if (previous.data < node.data) {
+            previous.right = node.right;
+            return
+          }
+          previous.left = node.right;
+          return;
+        }
+        if (node.left) {
+          console.log("previous is ", `${previous.data}`);
+          console.log(`has left child with value of ${node.left.data}`);
+          if (previous.data < node.data) {
+            previous.right = node.left;
+            return previous.right;
+          }
+          previous.left = node.left;
+          return;
+        }
+      }
+      if (value < node.data) {
+        console.log("less, left to ", `${node.left.data}`);
+        previous = node;
+        node = node.left;
+      } else if (value > node.data) {
+        console.log("more, right to ", `${node.right.data}`);
+        previous = node;
+        node = node.right;
+      }
+    }
+    if (value === node.data) {
+      console.log("end");
+      if (previous.data > value) {
+        previous.left = null;
+      } else if (previous.data < value) {
+        previous.right = null;
+      }
+      return node;
+    }
+    return node;
   }
 }
 
@@ -126,6 +169,8 @@ prettyPrint(myTree.root);
 myTree.insert(13);
 prettyPrint(myTree.root);
 
+myTree.delete(6345);
+prettyPrint(myTree.root);
 
 function prettyPrint(node, prefix = "", isLeft = true) {
   if (node === null) {
