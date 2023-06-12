@@ -6,65 +6,26 @@ export default class Tree {
   constructor(array) {
     this.root = buildTree(array);
   }
-  // insert pseudo
 
-  // from the root, check if node value to be inserted is higher or lower than root.
-  // if lower, move to left
-  // if higher, move to right
-  // keep doing the above until we find a node without any left/right children
-  // if node is lower, insert left and if higher, insert right
-
-  // can we do this similar to linked list? try:
   insert(value) {
-    console.log(this.root);
+    this.insertRecursive(this.root, value)
+  }
 
-    if (this.root === null) {
-      this.root = new Node(value);
-      return this.root;
+  insertRecursive(root, value) {
+    let node = root
+    if (node === null) {
+      node = new Node(value);
+      return node
     }
 
-    let node = this.root;
-
-    // this doesn't really work since it will replace a value if only one node is present
-    while (node.left || node.right) {
-      if (value === node.data) {
-        console.log(`${value} already present. Goodbye`);
-        return;
-      }
-      if (value < node.data) {
-        console.log(value, "smaller, moving down the tree to the left");
-        if (node.left) {
-          node = node.left;
-        } else {
-          node.left = new Node(value);
-          console.log("node is now", node);
-          return node.left;
-        }
-      } else {
-        console.log(value, "not smaller, moving down the tree to the right");
-        if (node.right) {
-          node = node.right;
-        } else {
-          node.right = new Node(value);
-          console.log("node is now", node);
-          return node.right;
-        }
-        console.log(node);
-      }
+    if (value < node.data) {
+      node.left = this.insertRecursive(node.left, value)
     }
-
-    if (value < node.data && !node.left) {
-      console.log("last bit");
-      node.left = new Node(value);
-      return node.left;
+    else if (value > node.data) {
+      node.right = this.insertRecursive(node.right, value)
     }
-    if (value === node.data) {
-      console.log(`last bit but ${value} already present. Goodbye`);
-      return;
-    }
-    console.log("last bit");
-    node.right = new Node(value);
-    return node.right;
+    console.log("inserting", `${value}`)
+    return node;
   }
 
   delete(value) {
