@@ -55,7 +55,7 @@ export default class Tree {
       console.log(`left subtree of node to be removed is `, leftSub);
 
       // parent of node to take replacement
-      const parentOfNodeReplacer = findLow(rightSub);
+      const parentOfNodeReplacer = this.findLow(rightSub);
       console.log(
         `parent of node to take ${value} place is`,
         parentOfNodeReplacer
@@ -78,46 +78,66 @@ export default class Tree {
     if (!node.right && !node.left) {
       if (value < parent.data) {
         parent.left = null;
-        return parent.left;
+        return;
       }
       parent.right = null;
-      return parent.right;
+      return;
     }
     // node has only right child (works)
     if (node.right) {
       if (value < parent.data) {
         parent.left = node.right;
-        return parent.left;
+        return;
       }
       parent.right = node.right;
-      return parent.right;
+      return;
     }
     // node has only left child (works)
     if (node.left) {
       if (value < parent.data) {
         parent.left = node.left;
-        return parent.left;
+        return;
       }
       parent.right = node.left;
-      return parent.right;
     }
+  }
 
+  findLow(subtreeRight) {
+    let node = subtreeRight;
+    let parent = null;
+    if (node.left === null) {
+      return node;
+    }
+    while (node.left) {
+      parent = node;
+      node = node.left;
+      console.log("node", node, "parent ", parent);
+    }
+    console.log(`lowest is ${node.data}, parent is ${parent.data}`, parent);
+    return parent;
   }
-}
 
-function findLow(subtreeRight) {
-  let node = subtreeRight;
-  let parent = null;
-  if (node.left === null) {
-    return node;
+  // find
+  find(value) {
+    return this.findRecursive(this.root, value);
   }
-  while (node.left) {
-    parent = node;
-    node = node.left;
-    console.log("node", node, "parent ", parent);
+
+  findRecursive(root, value) {
+    const node = root;
+    if (node === null) {
+      console.log("node is null, returning");
+      return null;
+    }
+    if (value < node.data) {
+      return this.findRecursive(node.left, value);
+    }
+    if (value > node.data) {
+      return this.findRecursive(node.right, value);
+    }
+    if (value === node.data) {
+      return node;
+    }
   }
-  console.log(`lowest is ${node.data}, parent is ${parent.data}`, parent);
-  return parent;
 }
 
 function buildTree(array) {
@@ -155,7 +175,10 @@ console.log("prepped array ", preparedArray(testArray));
 
 prettyPrint(myTree.root);
 
-myTree.delete(9);
+// myTree.delete(9);
+// prettyPrint(myTree.root);
+
+console.log("find ", myTree.find(23));
 prettyPrint(myTree.root);
 
 console.log("myTree root ", myTree.root);
