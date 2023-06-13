@@ -23,7 +23,6 @@ export default class Tree {
     } else if (value > node.data) {
       node.right = this.insertRecursive(node.right, value);
     }
-    console.log("inserting", `${value}`);
     return node;
   }
 
@@ -31,9 +30,6 @@ export default class Tree {
     let node = this.root;
     let parent = null;
 
-    // if node to be deleted is the root:
-    // fill out
-    // find the value (works)
     while (node.data !== value) {
       if (value < node.data) {
         parent = node;
@@ -44,37 +40,18 @@ export default class Tree {
       }
     }
 
+    // if node has 2 subtrees
     if (node.left && node.right) {
-      console.log(`node to be removed is`, node);
-      // right subtree of node to be removed
       const rightSub = node.right;
-      console.log(`right subtree of node to be removed is `, rightSub);
-
-      // left subtree of node to be removed
-      const leftSub = node.left;
-      console.log(`left subtree of node to be removed is `, leftSub);
-
-      // parent of node to take replacement
-      const parentOfNodeReplacer = this.findLow(rightSub);
-      console.log(
-        `parent of node to take ${value} place is`,
-        parentOfNodeReplacer
-      );
-      // child that's going to take its place (always the most left child)
+      const parentOfNodeReplacer = findLow(rightSub);
       const replacingNode = parentOfNodeReplacer.left;
-      console.log(`child that will take ${value} place is`, replacingNode);
-      // copy replacing node data to node that gets removed (works up to here)
       node.data = replacingNode.data;
-      // children of the replacement node
       const orphans = replacingNode.right;
-      console.log(`orphans to be reattached are`, orphans);
-      // if replacement node has right orphans (), they need to be reattached to the parent of the replacer
-
       parentOfNodeReplacer.left = orphans;
       return;
     }
 
-    // node has no children (works)
+    // node has no children
     if (!node.right && !node.left) {
       if (value < parent.data) {
         parent.left = null;
@@ -83,7 +60,7 @@ export default class Tree {
       parent.right = null;
       return;
     }
-    // node has only right child (works)
+    // node has only right child
     if (node.right) {
       if (value < parent.data) {
         parent.left = node.right;
@@ -92,7 +69,7 @@ export default class Tree {
       parent.right = node.right;
       return;
     }
-    // node has only left child (works)
+    // node has only left child
     if (node.left) {
       if (value < parent.data) {
         parent.left = node.left;
@@ -100,21 +77,6 @@ export default class Tree {
       }
       parent.right = node.left;
     }
-  }
-
-  findLow(subtreeRight) {
-    let node = subtreeRight;
-    let parent = null;
-    if (node.left === null) {
-      return node;
-    }
-    while (node.left) {
-      parent = node;
-      node = node.left;
-      console.log("node", node, "parent ", parent);
-    }
-    console.log(`lowest is ${node.data}, parent is ${parent.data}`, parent);
-    return parent;
   }
 
   // find
@@ -125,7 +87,6 @@ export default class Tree {
   findRecursive(root, value) {
     const node = root;
     if (node === null) {
-      console.log("node is null, returning");
       return null;
     }
     if (value < node.data) {
@@ -134,10 +95,21 @@ export default class Tree {
     if (value > node.data) {
       return this.findRecursive(node.right, value);
     }
-    if (value === node.data) {
-      return node;
-    }
+    return node;
   }
+}
+
+function findLow(subtreeRight) {
+  let node = subtreeRight;
+  let parent = null;
+  if (node.left === null) {
+    return node;
+  }
+  while (node.left) {
+    parent = node;
+    node = node.left;
+  }
+  return parent;
 }
 
 function buildTree(array) {
@@ -178,13 +150,13 @@ prettyPrint(myTree.root);
 // myTree.delete(9);
 // prettyPrint(myTree.root);
 
-console.log("find ", myTree.find(23));
+console.log("find ", myTree.find(6345));
 prettyPrint(myTree.root);
 
 console.log("myTree root ", myTree.root);
 
-// myTree.delete(4);
-// prettyPrint(myTree.root);
+myTree.delete(9);
+prettyPrint(myTree.root);
 
 function prettyPrint(node, prefix = "", isLeft = true) {
   if (node === null) {
