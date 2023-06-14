@@ -99,22 +99,46 @@ export default class Tree {
   }
 
   levelOrder(root) {
-    if (root === null) return []
+    if (root === null) return [];
     const queue = [root];
     // while something in queue, use the first item
-    const levelOrderArray =[]
+    const levelOrderArray = [];
     while (queue.length !== 0) {
-     let node = queue.pop()
-     levelOrderArray.push(node.data)
+      let node = queue.pop();
+      levelOrderArray.push(node.data);
       console.log("hi", node.data);
       if (node.left) {
-        queue.unshift(node.left)
+        queue.unshift(node.left);
       }
       if (node.right) {
-        queue.unshift(node.right)
+        queue.unshift(node.right);
       }
-    } 
-    return levelOrderArray
+    }
+    return levelOrderArray;
+  }
+
+  levelOrderA(cb) {
+      return cb(this.root)
+  }
+
+  levelOrderIterate(...nodes) {
+    const queue = nodes
+    const output = []
+    while (queue.length !== 0) {
+
+      const node = queue.pop()
+
+      output.push(node.data)
+
+      if (node.left) {
+        queue.unshift(node.left);
+      }
+      if (node.right) {
+        queue.unshift(node.right);
+      }
+    }
+    console.log("output ", output)
+    return output
   }
 }
 
@@ -148,10 +172,10 @@ function buildTree(array) {
 // testing area
 const testArray = [1, 3, 5, 7, 9, 2, 4, 6, 8, 10, 11, 13, 15, 12, 14];
 const testArrayDeux = [1, 7, 4, 23, 12, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
-const testArrayTrois = [
-  1, 7, 4, 23, 12, 9, 4, 3, 5, 7, 9, 67, 6345, 324, 99, 77, 66, 23, 25, 26, 26,
-  56, 5634, 654, 5643, 65, 4, 534, 765, 7684, 5, 4, 87, 8, 565,
-];
+// const testArrayTrois = [
+//   1, 7, 4, 23, 12, 9, 4, 3, 5, 7, 9, 67, 6345, 324, 99, 77, 66, 23, 25, 26, 26,
+//   56, 5634, 654, 5643, 65, 4, 534, 765, 7684, 5, 4, 87, 8, 565,
+// ];
 
 const myTree = new Tree(preparedArray(testArrayDeux));
 
@@ -176,6 +200,7 @@ prettyPrint(myTree.root);
 
 console.log("myTree root ", myTree.root);
 console.log("levelorder ", myTree.levelOrder(myTree.root));
+console.log("levelorder Iterate with callback", myTree.levelOrderA(myTree.levelOrderIterate))
 
 function prettyPrint(node, prefix = "", isLeft = true) {
   if (node === null) {
