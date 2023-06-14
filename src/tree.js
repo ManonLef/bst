@@ -178,6 +178,21 @@ export default class Tree {
   // postorder
   // postorder traversal is: right -> left -> root
   // my array: 7, 5, 6, 3, 1, 2, 4
+
+  postOrder(cb, node = this.root, output = []) {
+    if (node === null) return;
+
+    this.postOrder(cb, node.right, output);
+    this.postOrder(cb, node.left, output);
+
+    if (typeof cb === "function") output.push(cb(node));
+    else output.push(node.data);
+
+
+    return output;
+  }
+
+
 }
 
 function callback(cbData) {
@@ -264,6 +279,12 @@ console.log("tree preorder", newTree.preOrder());
 
 // preorder with callback
 console.log("tree preorder with callback", newTree.preOrder(callback));
+
+// postOrder without callback
+console.log("tree postOrder", newTree.postOrder());
+
+// postOrder with callback
+console.log("tree postOrder with callback", newTree.postOrder(callback));
 
 function prettyPrint(node, prefix = "", isLeft = true) {
   if (node === null) {
