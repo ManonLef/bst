@@ -118,17 +118,13 @@ export default class Tree {
   }
 
   levelOrderA(cb) {
-      return cb(this.root)
-  }
-
-  levelOrderIterate(...nodes) {
-    const queue = nodes
-    const output = []
+    const queue = [this.root];
+    const output = [];
     while (queue.length !== 0) {
+      const node = queue.pop();
 
-      const node = queue.pop()
-
-      output.push(node.data)
+      if (!cb) output.push(node.data);
+      else output.push(cb(node.data));
 
       if (node.left) {
         queue.unshift(node.left);
@@ -137,11 +133,16 @@ export default class Tree {
         queue.unshift(node.right);
       }
     }
-    console.log("output ", output)
-    return output
+    console.log("output ", output);
+    return output;
+  }
+
+  levelOrderCb(cbData) {
+    return cbData * 2;
   }
 }
 
+// helper for delete method
 function findLow(subtreeRight) {
   let node = subtreeRight;
   let parent = null;
@@ -200,7 +201,11 @@ prettyPrint(myTree.root);
 
 console.log("myTree root ", myTree.root);
 console.log("levelorder ", myTree.levelOrder(myTree.root));
-console.log("levelorder Iterate with callback", myTree.levelOrderA(myTree.levelOrderIterate))
+
+console.log(
+  "levelorder Iterate with callback",
+  myTree.levelOrderA(myTree.levelOrderCb)
+);
 
 function prettyPrint(node, prefix = "", isLeft = true) {
   if (node === null) {
