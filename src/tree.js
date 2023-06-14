@@ -98,15 +98,16 @@ export default class Tree {
     return node;
   }
 
-  levelOrder(root) {
-    if (root === null) return [];
-    const queue = [root];
-    // while something in queue, use the first item
+  // regular levelOrder
+  levelOrder() {
+    if (this.root === null) return [];
+
+    const queue = [this.root];
     const levelOrderArray = [];
+
     while (queue.length !== 0) {
-      let node = queue.pop();
+      const node = queue.pop();
       levelOrderArray.push(node.data);
-      console.log("hi", node.data);
       if (node.left) {
         queue.unshift(node.left);
       }
@@ -114,17 +115,22 @@ export default class Tree {
         queue.unshift(node.right);
       }
     }
+
     return levelOrderArray;
   }
 
+  // levelOrder that accepts a callback to manipulate data
   levelOrderA(cb) {
+    if (this.root === null) return [];
+
     const queue = [this.root];
     const output = [];
+
     while (queue.length !== 0) {
       const node = queue.pop();
 
       if (!cb) output.push(node.data);
-      else output.push(cb(node.data));
+      else output.push(cb(node));
 
       if (node.left) {
         queue.unshift(node.left);
@@ -133,13 +139,39 @@ export default class Tree {
         queue.unshift(node.right);
       }
     }
-    console.log("output ", output);
+
     return output;
   }
 
-  levelOrderCb(cbData) {
-    return cbData * 2;
+  // inorder (accepting cb just like levelorder)
+  // inorder traversal is: left -> root -> right
+  // my array: 1, 2, 3, 4, 5, 6, 7
+
+  inOrder(cb, node = this.root, output = []) {
+    if (node === null) return;
+    // if node has left tree, recurse node left
+
+    this.inOrder(cb, node.left, output);
+
+    if (typeof cb === "function") output.push(cb(node));
+    else output.push(node.data);
+
+    this.inOrder(cb, node.right, output);
+
+    return output;
   }
+
+  // preorder
+  // preorder traversal is: left -> right -> root
+  // my array: 1, 3, 2, 5, 7, 6, 4
+
+  // postorder
+  // postorder traversal is: right -> left -> root
+  // my array: 7, 5, 6, 3, 1, 2, 4
+}
+
+function callback(cbData) {
+  return cbData.data * 2;
 }
 
 // helper for delete method
@@ -203,9 +235,20 @@ console.log("myTree root ", myTree.root);
 console.log("levelorder ", myTree.levelOrder(myTree.root));
 
 console.log(
-  "levelorder Iterate with callback",
-  myTree.levelOrderA(myTree.levelOrderCb)
+  "levelorder Iterate with callback * 2",
+  myTree.levelOrderA(callback)
 );
+
+// order traversal testing
+const newTree = new Tree(preparedArray([6, 5, 4, 7, 3, 2, 1]));
+
+// inorder with callback
+console.log(newTree.inOrder(callback));
+prettyPrint(newTree.root);
+
+// inorder without callback
+console.log(newTree.inOrder());
+prettyPrint(newTree.root);
 
 function prettyPrint(node, prefix = "", isLeft = true) {
   if (node === null) {

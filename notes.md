@@ -6,3 +6,7 @@
 
 ## end of day notes june 9th
 - get back to insert function since it currently fails on nodes with 1 child node
+
+## june 14th
+- refactor delete function.
+- added inOrder iterative, no recursive method.
