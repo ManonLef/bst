@@ -97,6 +97,25 @@ export default class Tree {
     }
     return node;
   }
+
+  levelOrder(root) {
+    if (root === null) return []
+    const queue = [root];
+    // while something in queue, use the first item
+    const levelOrderArray =[]
+    while (queue.length !== 0) {
+     let node = queue.pop()
+     levelOrderArray.push(node.data)
+      console.log("hi", node.data);
+      if (node.left) {
+        queue.unshift(node.left)
+      }
+      if (node.right) {
+        queue.unshift(node.right)
+      }
+    } 
+    return levelOrderArray
+  }
 }
 
 function findLow(subtreeRight) {
@@ -143,7 +162,9 @@ console.log("prepped array ", preparedArray(testArray));
 // myTree.insert(8);
 // myTree.insert(6);
 // myTree.insert(5.9);
-// myTree.insert(6.5);
+myTree.insert(7000);
+myTree.insert(25);
+myTree.insert(8);
 
 prettyPrint(myTree.root);
 
@@ -154,9 +175,7 @@ console.log("find ", myTree.find(6345));
 prettyPrint(myTree.root);
 
 console.log("myTree root ", myTree.root);
-
-myTree.delete(9);
-prettyPrint(myTree.root);
+console.log("levelorder ", myTree.levelOrder(myTree.root));
 
 function prettyPrint(node, prefix = "", isLeft = true) {
   if (node === null) {
