@@ -149,7 +149,6 @@ export default class Tree {
 
   inOrder(cb, node = this.root, output = []) {
     if (node === null) return;
-    // if node has left tree, recurse node left
 
     this.inOrder(cb, node.left, output);
 
@@ -164,6 +163,17 @@ export default class Tree {
   // preorder
   // preorder traversal is: left -> right -> root
   // my array: 1, 3, 2, 5, 7, 6, 4
+
+  preOrder(cb, node = this.root, output = []) {
+    if (node === null) return;
+
+    this.preOrder(cb, node.left, output);
+    this.preOrder(cb, node.right, output);
+    if (typeof cb === "function") output.push(cb(node));
+    else output.push(node.data);
+
+    return output;
+  }
 
   // postorder
   // postorder traversal is: right -> left -> root
@@ -241,14 +251,19 @@ console.log(
 
 // order traversal testing
 const newTree = new Tree(preparedArray([6, 5, 4, 7, 3, 2, 1]));
-
-// inorder with callback
-console.log(newTree.inOrder(callback));
 prettyPrint(newTree.root);
 
 // inorder without callback
-console.log(newTree.inOrder());
-prettyPrint(newTree.root);
+console.log("tree inorder", newTree.inOrder());
+
+// inorder with callback
+console.log("tree inorder with callback ", newTree.inOrder(callback));
+
+// preorder without callback
+console.log("tree preorder", newTree.preOrder());
+
+// preorder with callback
+console.log("tree preorder with callback", newTree.preOrder(callback));
 
 function prettyPrint(node, prefix = "", isLeft = true) {
   if (node === null) {
