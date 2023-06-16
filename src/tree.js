@@ -188,11 +188,17 @@ export default class Tree {
     if (typeof cb === "function") output.push(cb(node));
     else output.push(node.data);
 
-
     return output;
   }
 
+  height(node = this.root) {
+    if (node === null) return 0;
+    const heightLeft = this.height(node.left);
+    const heightRight = this.height(node.right);
 
+    if (heightLeft > heightRight) return heightLeft + 1;
+    return heightRight + 1;
+  }
 }
 
 function callback(cbData) {
@@ -247,6 +253,7 @@ console.log("prepped array ", preparedArray(testArray));
 myTree.insert(7000);
 myTree.insert(25);
 myTree.insert(8);
+myTree.insert(500);
 
 prettyPrint(myTree.root);
 
@@ -286,6 +293,8 @@ console.log("tree postOrder", newTree.postOrder());
 // postOrder with callback
 console.log("tree postOrder with callback", newTree.postOrder(callback));
 
+// height
+console.log(myTree.height());
 function prettyPrint(node, prefix = "", isLeft = true) {
   if (node === null) {
     return;
