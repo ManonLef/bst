@@ -191,13 +191,26 @@ export default class Tree {
     return output;
   }
 
-  height(node = this.root) {
-    if (node === null) return 0;
+  // edges from this node to furthest leaf node
+  height(node) {
+    if (node === null) return -1;
     const heightLeft = this.height(node.left);
     const heightRight = this.height(node.right);
 
     if (heightLeft > heightRight) return heightLeft + 1;
     return heightRight + 1;
+  }
+
+  // from root to target
+  depth(node, parent = this.root) {
+    if (parent === null) return 0;
+    if (node.data < parent.data) {
+      return this.depth(node, parent.left) + 1;
+    }
+    if (node.data > parent.data) {
+      return this.depth(node, parent.right) + 1;
+    }
+    if ((node.data = parent.data)) return 0;
   }
 }
 
@@ -254,6 +267,10 @@ myTree.insert(7000);
 myTree.insert(25);
 myTree.insert(8);
 myTree.insert(500);
+myTree.insert(502);
+myTree.insert(503);
+myTree.insert(24);
+myTree.insert(501);
 
 prettyPrint(myTree.root);
 
@@ -293,8 +310,15 @@ console.log("tree postOrder", newTree.postOrder());
 // postOrder with callback
 console.log("tree postOrder with callback", newTree.postOrder(callback));
 
-// height
-console.log(myTree.height());
+// height root
+console.log("height from root: ", myTree.height(myTree.root));
+
+// height of node in tree
+console.log("height from existing node: ", myTree.height(myTree.find(500)));
+
+// depth
+console.log("depth: ", myTree.depth(myTree.find(500)));
+
 function prettyPrint(node, prefix = "", isLeft = true) {
   if (node === null) {
     return;
