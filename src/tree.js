@@ -212,6 +212,15 @@ export default class Tree {
     }
     if ((node.data = parent.data)) return 0;
   }
+
+  // height of left subtree and right subtree differ by maximum 1
+  // left subtree is balanced
+  // right subtree is balanced
+  isBalanced(root = this.root) {
+    const leftHeight = this.height(root.left);
+    const rightHeigh = this.height(root.right);
+    return(Math.abs(leftHeight - rightHeigh) <= 1)
+  }
 }
 
 function callback(cbData) {
@@ -267,10 +276,10 @@ myTree.insert(7000);
 myTree.insert(25);
 myTree.insert(8);
 myTree.insert(500);
-myTree.insert(502);
-myTree.insert(503);
-myTree.insert(24);
-myTree.insert(501);
+// myTree.insert(502);
+// myTree.insert(503);
+// myTree.insert(24);
+// myTree.insert(501);
 
 prettyPrint(myTree.root);
 
@@ -318,6 +327,9 @@ console.log("height from existing node: ", myTree.height(myTree.find(500)));
 
 // depth
 console.log("depth: ", myTree.depth(myTree.find(500)));
+
+// isBalanced?
+console.log("balancing: ", myTree.isBalanced());
 
 function prettyPrint(node, prefix = "", isLeft = true) {
   if (node === null) {
