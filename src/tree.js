@@ -65,7 +65,7 @@ export default class Tree {
   findLowest(node = this.root) {
     let root = node;
     let minimum = root.data;
-    while (!root.left) {
+    while (root.left) {
       minimum = root.left.data;
       root = root.left;
     }
