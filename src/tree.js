@@ -36,71 +36,41 @@ export default class Tree {
     return node;
   }
 
-  delete(value) {
-    let node = this.root;
-    let parent = null;
+  delete(value, node = this.root) {
+    const root = node;
+    if (root === null) return root;
 
-    while (node.data !== value) {
-      if (value < node.data) {
-        parent = node;
-        node = node.left;
-      } else if (value > node.data) {
-        parent = node;
-        node = node.right;
+    // find node to delete
+    if (value < root.data) {
+      root.left = this.delete(value, root.left);
+    } else if (value > root.data) {
+      root.right = this.delete(value, root.right);
+      // value is equal to node found
+    } else {
+      // only right child which will replace node to be deleted or no child
+      if (root.left === null) {
+        return root.right;
+        // only left child which will replace node to be deleted
       }
-    }
-
-    // if node has 2 subtrees
-    if (node.left && node.right) {
-      const rightSub = node.right;
-      const parentOfNodeReplacer = this.findLow(rightSub);
-      const replacingNode = parentOfNodeReplacer.left;
-      node.data = replacingNode.data;
-      const orphans = replacingNode.right;
-      parentOfNodeReplacer.left = orphans;
-      return;
+      if (root.right === null) {
+        return root.left;
+      }
+      root.data = this.findLowest(root.right);
+      root.right = this.delete(root.data, root.right);
     }
 
-    // node has no children
-    if (!node.right && !node.left) {
-      if (value < parent.data) {
-        parent.left = null;
-        return;
-      }
-      parent.right = null;
-      return;
-    }
-    // node has only right child
-    if (node.right) {
-      if (value < parent.data) {
-        parent.left = node.right;
-        return;
-      }
-      parent.right = node.right;
-      return;
-    }
-    // node has only left child
-    if (node.left) {
-      if (value < parent.data) {
-        parent.left = node.left;
-        return;
-      }
-      parent.right = node.left;
-    }
+    return root;
   }
 
   // delete helper
-  findLow(subtreeRight) {
-    let node = subtreeRight;
-    let parent = null;
-    if (node.left === null) {
-      return node;
+  findLowest(node = this.root) {
+    const root = node;
+    let minimum = root.data;
+    while (!root.left) {
+      minimum = root.left.data;
+      root = root.left;
     }
-    while (node.left) {
-      parent = node;
-      node = node.left;
-    }
-    return parent;
+    return minimum;
   }
 
   // find
@@ -279,9 +249,10 @@ myTree.insert(501);
 
 prettyPrint(myTree.root);
 
-// console.log("deleting...");
-// myTree.delete(4);
-// prettyPrint(myTree.root);
+console.log("deleting...");
+myTree.delete(6);
+console.log(myTree.inOrder());
+prettyPrint(myTree.root);
 
 console.log("find ", myTree.find(502));
 prettyPrint(myTree.root);
@@ -309,7 +280,7 @@ console.log("height from root: ", myTree.height(myTree.root));
 console.log("height from existing node: ", myTree.height(myTree.find(500)));
 
 // depth
-console.log("depth: ", myTree.depth(myTree.find(6345)));
+console.log("depth: ", myTree.depth(myTree.find(4)));
 
 // isBalanced?
 console.log("balancing: ", myTree.isBalanced(myTree.root));
