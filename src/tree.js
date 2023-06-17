@@ -216,10 +216,20 @@ export default class Tree {
   // height of left subtree and right subtree differ by maximum 1
   // left subtree is balanced
   // right subtree is balanced
-  isBalanced(root = this.root) {
+  isBalanced(root) {
+    const mainBalanced = this.balanced(root);
+    const leftBalanced = this.balanced(root.left);
+    const rightBalanced = this.balanced(root.right);
+    const allBalanced = (mainBalanced && leftBalanced && rightBalanced)
+    return allBalanced
+  }
+
+  balanced(root) {
+    if (root === null) return null;
     const leftHeight = this.height(root.left);
-    const rightHeigh = this.height(root.right);
-    return(Math.abs(leftHeight - rightHeigh) <= 1)
+    const rightHeight = this.height(root.right);
+    const balanced = Math.abs(leftHeight - rightHeight) <= 1;
+    return balanced;
   }
 }
 
@@ -326,10 +336,10 @@ console.log("height from root: ", myTree.height(myTree.root));
 console.log("height from existing node: ", myTree.height(myTree.find(500)));
 
 // depth
-console.log("depth: ", myTree.depth(myTree.find(500)));
+console.log("depth: ", myTree.depth(myTree.find(6345)));
 
 // isBalanced?
-console.log("balancing: ", myTree.isBalanced());
+console.log("balancing: ", myTree.isBalanced(myTree.root));
 
 function prettyPrint(node, prefix = "", isLeft = true) {
   if (node === null) {
