@@ -1,6 +1,6 @@
 /* eslint no-use-before-define: ["error", { "functions": false }] */
 import Node from "./node";
-import preparedArray from "./helpers";
+import { preparedArray, prettyPrint } from "./helpers";
 
 export default class Tree {
   constructor(array) {
@@ -11,16 +11,16 @@ export default class Tree {
     if (array.length === 0) {
       return null;
     }
-  
+
     const mid = Math.floor(array.length / 2);
     const root = new Node(array[mid]);
-  
+
     root.left = this.buildTree(array.slice(0, mid));
     root.right = this.buildTree(array.slice(mid + 1, array.length));
-  
+
     return root;
   }
-  
+
   insert(value) {
     this.insertRecursive(this.root, value);
   }
@@ -57,7 +57,7 @@ export default class Tree {
     // if node has 2 subtrees
     if (node.left && node.right) {
       const rightSub = node.right;
-      const parentOfNodeReplacer = findLow(rightSub);
+      const parentOfNodeReplacer = this.findLow(rightSub);
       const replacingNode = parentOfNodeReplacer.left;
       node.data = replacingNode.data;
       const orphans = replacingNode.right;
@@ -91,6 +91,20 @@ export default class Tree {
       }
       parent.right = node.left;
     }
+  }
+
+  // delete helper
+  findLow(subtreeRight) {
+    let node = subtreeRight;
+    let parent = null;
+    if (node.left === null) {
+      return node;
+    }
+    while (node.left) {
+      parent = node;
+      node = node.left;
+    }
+    return parent;
   }
 
   // find
@@ -157,10 +171,8 @@ export default class Tree {
     return output;
   }
 
-  // inorder (accepting cb just like levelorder)
   // inorder traversal is: left -> root -> right
   // my array: 1, 2, 3, 4, 5, 6, 7
-
   inOrder(cb, node = this.root, output = []) {
     if (node === null) return;
 
@@ -174,12 +186,10 @@ export default class Tree {
     return output;
   }
 
-  // preorder
   // preorder traversal is: left -> right -> root
   // my array: 1, 3, 2, 5, 7, 6, 4
-
   preOrder(cb, node = this.root, output = []) {
-    if (node === null) return;
+    if (node === null) return null;
 
     this.preOrder(cb, node.left, output);
     this.preOrder(cb, node.right, output);
@@ -189,10 +199,8 @@ export default class Tree {
     return output;
   }
 
-  // postorder
   // postorder traversal is: right -> left -> root
   // my array: 7, 5, 6, 3, 1, 2, 4
-
   postOrder(cb, node = this.root, output = []) {
     if (node === null) return;
 
@@ -224,7 +232,7 @@ export default class Tree {
     if (node.data > parent.data) {
       return this.depth(node, parent.right) + 1;
     }
-    if ((node.data = parent.data)) return 0;
+    if ((node.data === parent.data)) return 0;
   }
 
   // balanced: height of left subtree and right subtree differ by maximum 1
@@ -234,8 +242,8 @@ export default class Tree {
     const mainBalanced = this.balanced(root);
     const leftBalanced = this.balanced(root.left);
     const rightBalanced = this.balanced(root.right);
-    const allBalanced = (mainBalanced && leftBalanced && rightBalanced)
-    return allBalanced
+    const allBalanced = mainBalanced && leftBalanced && rightBalanced;
+    return allBalanced;
   }
 
   balanced(root) {
@@ -247,30 +255,9 @@ export default class Tree {
   }
 
   rebalance() {
-    this.root = this.buildTree(this.inOrder())
+    this.root = this.buildTree(this.inOrder());
   }
 }
-
-// helper for passing a callback
-function callback(cbData) {
-  return cbData.data * 2;
-}
-
-// helper for delete method
-function findLow(subtreeRight) {
-  let node = subtreeRight;
-  let parent = null;
-  if (node.left === null) {
-    return node;
-  }
-  while (node.left) {
-    parent = node;
-    node = node.left;
-  }
-  return parent;
-}
-
-
 
 // testing area
 const testArray = [1, 3, 5, 7, 9, 2, 4, 6, 8, 10, 11, 13, 15, 12, 14];
@@ -300,19 +287,15 @@ myTree.insert(501);
 
 prettyPrint(myTree.root);
 
-// myTree.delete(9);
-// prettyPrint(myTree.root);
+console.log("deleting...")
+myTree.delete(4);
+prettyPrint(myTree.root);
 
 console.log("find ", myTree.find(6345));
 prettyPrint(myTree.root);
 
 console.log("myTree root ", myTree.root);
 console.log("levelorder ", myTree.levelOrder(myTree.root));
-
-console.log(
-  "levelorder Iterate with callback * 2",
-  myTree.levelOrderA(callback)
-);
 
 // order traversal testing
 const newTree = new Tree(preparedArray([6, 5, 4, 7, 3, 2, 1]));
@@ -321,20 +304,14 @@ prettyPrint(newTree.root);
 // inorder without callback
 console.log("tree inorder", newTree.inOrder());
 
-// inorder with callback
-console.log("tree inorder with callback ", newTree.inOrder(callback));
 
 // preorder without callback
 console.log("tree preorder", newTree.preOrder());
 
-// preorder with callback
-console.log("tree preorder with callback", newTree.preOrder(callback));
 
 // postOrder without callback
 console.log("tree postOrder", newTree.postOrder());
 
-// postOrder with callback
-console.log("tree postOrder with callback", newTree.postOrder(callback));
 
 // height root
 console.log("height from root: ", myTree.height(myTree.root));
@@ -350,21 +327,7 @@ console.log("balancing: ", myTree.isBalanced(myTree.root));
 
 // rebalance
 console.log("rebalancing");
-myTree.rebalance()
+myTree.rebalance();
 prettyPrint(myTree.root);
 
 console.log("balancing: ", myTree.isBalanced(myTree.root));
-
-
-function prettyPrint(node, prefix = "", isLeft = true) {
-  if (node === null) {
-    return;
-  }
-  if (node.right !== null) {
-    prettyPrint(node.right, `${prefix}${isLeft ? "│   " : "    "}`, false);
-  }
-  console.log(`${prefix}${isLeft ? "└── " : "┌── "}${node.data}`);
-  if (node.left !== null) {
-    prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
-  }
-}
