@@ -21,11 +21,7 @@ export default class Tree {
     return root;
   }
 
-  insert(value) {
-    this.insertRecursive(this.root, value);
-  }
-
-  insertRecursive(root, value) {
+  insert(value, root = this.root) {
     let node = root;
     if (node === null) {
       node = new Node(value);
@@ -33,9 +29,9 @@ export default class Tree {
     }
 
     if (value < node.data) {
-      node.left = this.insertRecursive(node.left, value);
+      node.left = this.insert(value, node.left);
     } else if (value > node.data) {
-      node.right = this.insertRecursive(node.right, value);
+      node.right = this.insert(value, node.right);
     }
     return node;
   }
@@ -232,7 +228,7 @@ export default class Tree {
     if (node.data > parent.data) {
       return this.depth(node, parent.right) + 1;
     }
-    if ((node.data === parent.data)) return 0;
+    if (node.data === parent.data) return 0;
   }
 
   // balanced: height of left subtree and right subtree differ by maximum 1
@@ -287,9 +283,9 @@ myTree.insert(501);
 
 prettyPrint(myTree.root);
 
-console.log("deleting...")
-myTree.delete(4);
-prettyPrint(myTree.root);
+// console.log("deleting...");
+// myTree.delete(4);
+// prettyPrint(myTree.root);
 
 console.log("find ", myTree.find(6345));
 prettyPrint(myTree.root);
@@ -304,14 +300,11 @@ prettyPrint(newTree.root);
 // inorder without callback
 console.log("tree inorder", newTree.inOrder());
 
-
 // preorder without callback
 console.log("tree preorder", newTree.preOrder());
 
-
 // postOrder without callback
 console.log("tree postOrder", newTree.postOrder());
-
 
 // height root
 console.log("height from root: ", myTree.height(myTree.root));
