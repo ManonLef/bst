@@ -213,7 +213,7 @@ export default class Tree {
     if ((node.data = parent.data)) return 0;
   }
 
-  // height of left subtree and right subtree differ by maximum 1
+  // balanced: height of left subtree and right subtree differ by maximum 1
   // left subtree is balanced
   // right subtree is balanced
   isBalanced(root) {
@@ -230,6 +230,10 @@ export default class Tree {
     const rightHeight = this.height(root.right);
     const balanced = Math.abs(leftHeight - rightHeight) <= 1;
     return balanced;
+  }
+
+  rebalance() {
+    this.root = buildTree(this.inOrder())
   }
 }
 
@@ -279,17 +283,17 @@ console.log("prepped array ", preparedArray(testArray));
 
 // test inserting
 
-// myTree.insert(8);
-// myTree.insert(6);
-// myTree.insert(5.9);
+myTree.insert(8);
+myTree.insert(6);
+myTree.insert(5.9);
 myTree.insert(7000);
 myTree.insert(25);
 myTree.insert(8);
 myTree.insert(500);
-// myTree.insert(502);
-// myTree.insert(503);
-// myTree.insert(24);
-// myTree.insert(501);
+myTree.insert(502);
+myTree.insert(503);
+myTree.insert(24);
+myTree.insert(501);
 
 prettyPrint(myTree.root);
 
@@ -340,6 +344,14 @@ console.log("depth: ", myTree.depth(myTree.find(6345)));
 
 // isBalanced?
 console.log("balancing: ", myTree.isBalanced(myTree.root));
+
+// rebalance
+console.log("rebalancing");
+myTree.rebalance()
+prettyPrint(myTree.root);
+
+console.log("balancing: ", myTree.isBalanced(myTree.root));
+
 
 function prettyPrint(node, prefix = "", isLeft = true) {
   if (node === null) {
