@@ -104,20 +104,16 @@ export default class Tree {
   }
 
   // find
-  find(value) {
-    return this.findRecursive(this.root, value);
-  }
-
-  findRecursive(root, value) {
+  find(value, root = this.root) {
     const node = root;
     if (node === null) {
       return null;
     }
     if (value < node.data) {
-      return this.findRecursive(node.left, value);
+      return this.find(value, node.left);
     }
     if (value > node.data) {
-      return this.findRecursive(node.right, value);
+      return this.find(value, node.right);
     }
     return node;
   }
@@ -287,7 +283,7 @@ prettyPrint(myTree.root);
 // myTree.delete(4);
 // prettyPrint(myTree.root);
 
-console.log("find ", myTree.find(6345));
+console.log("find ", myTree.find(502));
 prettyPrint(myTree.root);
 
 console.log("myTree root ", myTree.root);
