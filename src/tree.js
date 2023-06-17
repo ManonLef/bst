@@ -4,9 +4,23 @@ import preparedArray from "./helpers";
 
 export default class Tree {
   constructor(array) {
-    this.root = buildTree(array);
+    this.root = this.buildTree(array);
   }
 
+  buildTree(array) {
+    if (array.length === 0) {
+      return null;
+    }
+  
+    const mid = Math.floor(array.length / 2);
+    const root = new Node(array[mid]);
+  
+    root.left = this.buildTree(array.slice(0, mid));
+    root.right = this.buildTree(array.slice(mid + 1, array.length));
+  
+    return root;
+  }
+  
   insert(value) {
     this.insertRecursive(this.root, value);
   }
@@ -233,10 +247,11 @@ export default class Tree {
   }
 
   rebalance() {
-    this.root = buildTree(this.inOrder())
+    this.root = this.buildTree(this.inOrder())
   }
 }
 
+// helper for passing a callback
 function callback(cbData) {
   return cbData.data * 2;
 }
@@ -255,19 +270,7 @@ function findLow(subtreeRight) {
   return parent;
 }
 
-function buildTree(array) {
-  if (array.length === 0) {
-    return null;
-  }
 
-  const mid = Math.floor(array.length / 2);
-  const root = new Node(array[mid]);
-
-  root.left = buildTree(array.slice(0, mid));
-  root.right = buildTree(array.slice(mid + 1, array.length));
-
-  return root;
-}
 
 // testing area
 const testArray = [1, 3, 5, 7, 9, 2, 4, 6, 8, 10, 11, 13, 15, 12, 14];
