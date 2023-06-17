@@ -33,6 +33,20 @@ function mergeSort(array) {
   return merged;
 }
 
+function preparedArray(array) {
+  const bstArray = mergeSort(removeDuplicates(array));
+  return bstArray;
+}
+
+function randomArray() {
+  const array = [];
+  const items = Math.floor(Math.random() * 40 + 10);
+  while (array.length < items) {
+    array.push(Math.floor(Math.random() * 100 + 1));
+  }
+  return array;
+}
+
 // console visualizer helper
 function prettyPrint(node, prefix = "", isLeft = true) {
   if (node === null) {
@@ -46,10 +60,3 @@ function prettyPrint(node, prefix = "", isLeft = true) {
     prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
   }
 }
-
-function preparedArray(array) {
-  const bstArray = mergeSort(removeDuplicates(array));
-  return bstArray;
-}
-
-export { preparedArray, prettyPrint };
