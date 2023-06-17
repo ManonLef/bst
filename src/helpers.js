@@ -1,8 +1,10 @@
+/* eslint-disable no-console */
+import Tree from "./tree";
+
 function removeDuplicates(array) {
   const arrayCopy = [...array];
   const filteredArray = [...new Set(arrayCopy)];
   return filteredArray;
-  // rewrite for practice with reduce
 }
 
 function mergeSort(array) {
@@ -60,3 +62,43 @@ function prettyPrint(node, prefix = "", isLeft = true) {
     prettyPrint(node.left, `${prefix}${isLeft ? "    " : "│   "}`, true);
   }
 }
+
+// Driver Script
+
+// Create a binary search tree from an array of random numbers < 100
+const myTree = new Tree(preparedArray(randomArray()));
+prettyPrint(myTree.root);
+
+// Confirm that the tree is balanced by calling isBalanced.
+console.log("Confirm tree is balanced: ", myTree.isBalanced()) // true
+
+// Print out all elements in level, pre, post, and in order.
+console.log("Level Order: ", myTree.levelOrder())
+console.log("Pre Order: ", myTree.preOrder())
+console.log("Post Order: ", myTree.postOrder())
+console.log("In Order: ", myTree.inOrder())
+
+// Unbalance the tree by adding several numbers > 100.
+myTree.insert(101)
+myTree.insert(102)
+myTree.insert(103)
+myTree.insert(104)
+myTree.insert(105)
+prettyPrint(myTree.root);
+
+// Confirm that the tree is unbalanced by calling isBalanced.
+console.log("Is the tree balanced? ", myTree.isBalanced()) 
+
+// Balance the tree by calling rebalance.
+console.log("it's not balanced, Let me rebalance it for you")
+myTree.rebalance()
+prettyPrint(myTree.root);
+
+// Confirm that the tree is balanced by calling isBalanced.
+console.log("Are you sure it's balanced now? ", myTree.isBalanced()) // true
+
+// Print out all elements in level, pre, post, and in order.
+console.log("Level Order: ", myTree.levelOrder())
+console.log("Pre Order: ", myTree.preOrder())
+console.log("Post Order: ", myTree.postOrder())
+console.log("In Order: ", myTree.inOrder())

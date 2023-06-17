@@ -1,6 +1,5 @@
 /* eslint no-use-before-define: ["error", { "functions": false }] */
 import Node from "./node";
-import { preparedArray, prettyPrint } from "./helpers";
 
 export default class Tree {
   constructor(array) {
@@ -64,7 +63,7 @@ export default class Tree {
 
   // delete helper
   findLowest(node = this.root) {
-    const root = node;
+    let root = node;
     let minimum = root.data;
     while (!root.left) {
       minimum = root.left.data;
@@ -200,7 +199,7 @@ export default class Tree {
   // balanced: height of left subtree and right subtree differ by maximum 1
   // left subtree is balanced
   // right subtree is balanced
-  isBalanced(root) {
+  isBalanced(root = this.root) {
     const mainBalanced = this.balanced(root);
     const leftBalanced = this.balanced(root.left);
     const rightBalanced = this.balanced(root.right);
@@ -220,74 +219,3 @@ export default class Tree {
     this.root = this.buildTree(this.inOrder());
   }
 }
-
-// testing area
-const testArray = [1, 3, 5, 7, 9, 2, 4, 6, 8, 10, 11, 13, 15, 12, 14];
-const testArrayDeux = [1, 7, 4, 23, 12, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
-// const testArrayTrois = [
-//   1, 7, 4, 23, 12, 9, 4, 3, 5, 7, 9, 67, 6345, 324, 99, 77, 66, 23, 25, 26, 26,
-//   56, 5634, 654, 5643, 65, 4, 534, 765, 7684, 5, 4, 87, 8, 565,
-// ];
-
-const myTree = new Tree(preparedArray(testArrayDeux));
-
-console.log("prepped array ", preparedArray(testArray));
-
-// test inserting
-
-myTree.insert(8);
-myTree.insert(6);
-myTree.insert(5.9);
-myTree.insert(7000);
-myTree.insert(25);
-myTree.insert(8);
-myTree.insert(500);
-myTree.insert(502);
-myTree.insert(503);
-myTree.insert(24);
-myTree.insert(501);
-
-prettyPrint(myTree.root);
-
-console.log("deleting...");
-myTree.delete(6);
-console.log(myTree.inOrder());
-prettyPrint(myTree.root);
-
-console.log("find ", myTree.find(502));
-prettyPrint(myTree.root);
-
-console.log("myTree root ", myTree.root);
-console.log("levelorder ", myTree.levelOrder(myTree.root));
-
-// order traversal testing
-const newTree = new Tree(preparedArray([6, 5, 4, 7, 3, 2, 1]));
-prettyPrint(newTree.root);
-
-// inorder without callback
-console.log("tree inorder", newTree.inOrder());
-
-// preorder without callback
-console.log("tree preorder", newTree.preOrder());
-
-// postOrder without callback
-console.log("tree postOrder", newTree.postOrder());
-
-// height root
-console.log("height from root: ", myTree.height(myTree.root));
-
-// height of node in tree
-console.log("height from existing node: ", myTree.height(myTree.find(500)));
-
-// depth
-console.log("depth: ", myTree.depth(myTree.find(4)));
-
-// isBalanced?
-console.log("balancing: ", myTree.isBalanced(myTree.root));
-
-// rebalance
-console.log("rebalancing");
-myTree.rebalance();
-prettyPrint(myTree.root);
-
-console.log("balancing: ", myTree.isBalanced(myTree.root));
